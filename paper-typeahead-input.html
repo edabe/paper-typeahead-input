@@ -69,6 +69,7 @@ If you want to save it in bower.json file, remember to add flag --save
     url="{{prefetchUrl}}"
     handle-as="json"
     last-response="{{_prefetchedCandidates}}"
+    on-response="_handlePrefetchResponse"
     ></iron-ajax>
     </template>
 
@@ -92,12 +93,12 @@ If you want to save it in bower.json file, remember to add flag --save
     <paper-material >
     <paper-menu on-iron-select="_itemSelect">
       <template is="dom-repeat" items="{{_suggestions}}">
-        <template is="dom-if" if="{{isCandidatesJson}}"> 
+        <template is="dom-if" if="{{isCandidatesJson}}">
           <paper-item on-mouseover="_selection" on-tap="_select">
            <span>{{_getDisplayValue(item)}}</span>
           </paper-item>
         </template>
-        <template is="dom-if" if="{{!isCandidatesJson}}"> 
+        <template is="dom-if" if="{{!isCandidatesJson}}">
           <paper-item on-mouseover="_selection" on-tap="_select">
            <span>{{item}}</span>
           </paper-item>
@@ -137,6 +138,16 @@ If you want to save it in bower.json file, remember to add flag --save
      *
      * @event pt-remote-searching-end
      */
+     /**
+     * Fired when remoteUrl is set up and a response is received
+     *
+     * @event pt-remote-response
+     */
+     /**
+     * Fired when prefetchUrl is set up and a response is received
+     *
+     * @event pt-prefetch-response
+     */
     properties: {
 
       /**
@@ -161,9 +172,20 @@ If you want to save it in bower.json file, remember to add flag --save
         value:[]
       },
       /**
-       * Url for a prefectched list in json format for the list of suggestion candidates. The response should be something like: ["a","b"]
+       * Url for a prefectched list in json format for the list of suggestion candidates.
+       * The response should be something like: ["a","b"] or a function should be passed
+       * to property 'parsePrefetchResponse' that will handle the prefetchUrl response
+       * and return something like: ["a","b"]
        */
       prefetchUrl:String,
+      /**
+       * Function to handle the response from prefetchUrl.
+       * It should return something like: ["a","b"]
+       */
+      parsePrefetchResponse:{
+        type:Function,
+        value: undefined
+      },
       /**
       * The prefetched candidates get by prefetchUrl
       */
@@ -200,7 +222,18 @@ If you want to save it in bower.json file, remember to add flag --save
         value:undefined
       },
       /**
-       * A boolean property to indicate if elements in the candidates list are json dictionary. 
+       * Function to handle the response from remotehUrl.
+       * It should return something like: ["a","b"]
+       * If 'isCandidatesJson' is true, it should return something like: [{"k":"v1"}, {"k":"v2"}]
+       */
+      parseRemoteResponse:{
+        type:Function,
+        value: function() {
+          return function(data){ return data }.bind(this);
+        }
+      },
+      /**
+       * A boolean property to indicate if elements in the candidates list are json dictionary.
        * When this property set up to be true, the candidates will be treated as list of json objects. Otherwise will be treated as list of strings.
        */
       isCandidatesJson:{
@@ -208,7 +241,7 @@ If you want to save it in bower.json file, remember to add flag --save
         value:false
       },
       /**
-       * An array to tell what property in the json object of candidate is searchable. 
+       * An array to tell what property in the json object of candidate is searchable.
        * This property only makes sense when property isCandidatesJson set to be true.
        */
       searchableProps:{
@@ -334,6 +367,14 @@ If you want to save it in bower.json file, remember to add flag --save
     _itemSelect:function(e, detail){
       this.fire('pt-item-select',detail);
     },
+    _handlePrefetchResponse:function(e, detail){
+      this.fire('pt-prefetch-response',detail.response);
+      // process prefetch response
+      if (typeof(this._prefetchedCandidates) != 'undefined' &&
+          typeof(this.parsePrefetchResponse) === 'function') {
+        this._prefetchedCandidates = this.parsePrefetchResponse(this._prefetchedCandidates);
+      }
+    },
     // Element Behavior
     /**
      * Callback for keydown event
@@ -375,7 +416,7 @@ If you want to save it in bower.json file, remember to add flag --save
         if (this.isCandidatesJson == true){
           this.inputObject = this._suggestions[index];
           this.inputValue = this._getDisplayValue(this.inputObject);
-        } 
+        }
         else{
           this.inputValue = this._suggestions[index];
         }
@@ -429,7 +470,7 @@ If you want to save it in bower.json file, remember to add flag --save
             if (this.isCandidatesJson == true){
               this.inputObject = this._suggestions[index];
               this.inputValue = this._getDisplayValue(this.inputObject);
-            } 
+            }
             else{
               this.inputValue = this._suggestions[index];
             }
@@ -524,18 +565,17 @@ If you want to save it in bower.json file, remember to add flag --save
           xmlhttp.onreadystatechange = function() {
               if (xmlhttp.readyState === 4) {
                 if (xmlhttp.status == 200){
-                    var resp = xmlhttp.response;
-                    var remoteMatched = JSON.parse(resp);
+                    var resp = JSON.parse(xmlhttp.response);
+                    var remoteMatched = ptinput.parseRemoteResponse(resp);
                     var cuttedMatched = remoteMatched.slice(0,ptinput.maxSuggestions);
                     matched = matched.concat(cuttedMatched);
                     // ptinput._suggestions = ptinput._suggestions.concat(cuttedMatched);
                     ptinput._suggestions = matched;
+                    ptinput.fire('pt-remote-response',resp);
                 }
                 pt_element.remoteUrlSearching = false;
                 pt_element.fire('pt-remote-searching-end',pt_element);
               }
-
-
           }
           xmlhttp.send();
         }, this.remoteUrlWaitMs);

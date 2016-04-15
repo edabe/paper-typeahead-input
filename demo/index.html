@@ -40,66 +40,86 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <paper-material class="demo"  elevation="1">
     <paper-material class="demo"  elevation="1">
-    <code>&lt;paper-typeahead-input max-suggestions="4" label="Prefetched candidates example with maxSuggestions 4" prefetch-url="http://localhost:9004/components/paper-typeahead-input/countries.json" placeholder="Countries"&gt;
+    <code>&lt;paper-typeahead-input max-suggestions="4" label="Prefetched candidates example with maxSuggestions 4" prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/countries.json" placeholder="Countries"&gt;
     &lt;/paper-typeahead-input&gt;
     </code>
     </paper-material>
-    <!-- <paper-typeahead-input max-suggestions="4" label="Prefetched candidates example with maxSuggestions 4" prefetch-url="http://localhost:9004/components/paper-typeahead-input/countries.json" placeholder="Countries"> -->
-    <paper-typeahead-input max-suggestions="4" label="Prefetched candidates example with maxSuggestions 4" prefetch-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/countries.json" placeholder="Countries">
+    <!-- <paper-typeahead-input max-suggestions="4" label="Prefetched candidates example with maxSuggestions 4" prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/countries.json" placeholder="Countries"> -->
+    <paper-typeahead-input max-suggestions="4" label="Prefetched candidates example with maxSuggestions 4" prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/countries.json" placeholder="Countries" on-pt-prefetch-response="handlePrefetch">
     </paper-typeahead-input>
     </paper-material>
 
     <paper-material class="demo"  elevation="1">
     <paper-material class="demo"  elevation="1">
-    <code>&lt;paper-typeahead-input max-suggestions="4" label="Both local candidates and prefetched example with masSuggestions" local-candidates="{{<span>states</span>}}" prefetch-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/countries.json" placeholder="US states and Countries"&gt;
+    <code>&lt;paper-typeahead-input parse-prefetch-response="{{parseKeywords}}" label="Prefetched candidates example with parse-prefetch-response" prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/countries.json" placeholder="Keywords"&gt;
     &lt;/paper-typeahead-input&gt;
     </code>
     </paper-material>
-    <paper-typeahead-input max-suggestions="4" label="Both local candidates and prefetched example with masSuggestions" local-candidates="{{states}}" prefetch-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/countries.json" placeholder="US states and Countries">
+    <paper-typeahead-input parse-prefetch-response="{{parseKeywords}}" label="Prefetched candidates example with parse-prefetch-response" prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/bower.json" placeholder="Keywords">
     </paper-typeahead-input>
     </paper-material>
 
     <paper-material class="demo"  elevation="1">
     <paper-material class="demo"  elevation="1">
-    <code>&lt;paper-typeahead-input max-suggestions="5" label="Remote URL example" remote-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" placeholder="Enter anything that will be passed in as a url parameter"&gt;
+    <code>&lt;paper-typeahead-input max-suggestions="4" label="Both local candidates and prefetched example with masSuggestions" local-candidates="{{<span>states</span>}}" prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/countries.json" placeholder="US states and Countries"&gt;
     &lt;/paper-typeahead-input&gt;
     </code>
     </paper-material>
-    <paper-typeahead-input max-suggestions="5" label="Remote URL example" remote-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" placeholder="Enter anything that will be passed in as a url parameter">
+    <paper-typeahead-input max-suggestions="4" label="Both local candidates and prefetched example with masSuggestions" local-candidates="{{states}}" prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/countries.json" placeholder="US states and Countries">
     </paper-typeahead-input>
     </paper-material>
 
     <paper-material class="demo"  elevation="1">
     <paper-material class="demo"  elevation="1">
-    <code>&lt;paper-typeahead-input max-suggestions="5" label="Remote URL example" remote-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" remote-url-wait-ms="1000" placeholder="Enter anything that will be passed in as a url parameter"&gt;
+    <code>&lt;paper-typeahead-input max-suggestions="5" label="Remote URL example" remote-url="{{fakeApiCall}}/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" placeholder="Enter anything that will be passed in as a url parameter"&gt;
+    &lt;/paper-typeahead-input&gt;
+    </code>
+    </paper-material>
+    <paper-typeahead-input max-suggestions="5" label="Remote URL example" remote-url="{{fakeApiCall}}/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" placeholder="Enter anything that will be passed in as a url parameter" on-pt-remote-response="handleRemote">
+    </paper-typeahead-input>
+    </paper-material>
+
+    <paper-material class="demo"  elevation="1">
+    <paper-material class="demo"  elevation="1">
+    <code>&lt;paper-typeahead-input parse-remote-response="{{parseKeywords}}" label="Remote URL with parse-remote-response" remote-url="{{fakeApiCall}}/components/paper-typeahead-input/bower.json?q=%QUERY" placeholder="Enter anything that will be passed in as a url parameter"&gt;
+    &lt;/paper-typeahead-input&gt;
+    </code>
+    </paper-material>
+    <paper-typeahead-input parse-remote-response="{{parseKeywords}}" label="Remote URL with parse-remote-response" remote-url="{{fakeApiCall}}/components/paper-typeahead-input/bower.json?q=%QUERY" placeholder="Enter anything that will be passed in as a url parameter">
+    </paper-typeahead-input>
+    </paper-material>
+
+    <paper-material class="demo"  elevation="1">
+    <paper-material class="demo"  elevation="1">
+    <code>&lt;paper-typeahead-input max-suggestions="5" label="Remote URL example" remote-url="{{fakeApiCall}}/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" remote-url-wait-ms="1000" placeholder="Enter anything that will be passed in as a url parameter"&gt;
     &lt;/paper-typeahead-input&gt;
     </code>
     </paper-material>
     <paper-material class="demo"  elevation="1">
       Is remote url Searching? <span>{{isSearching}}</span>
     </paper-material>
-    <paper-typeahead-input max-suggestions="5" label="Remote URL example with wait time set to 1s" remote-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" remote-url-searching="{{isSearching}}" remote-url-wait-ms="1000" placeholder="Enter anything that will be passed in as a url parameter">
+    <paper-typeahead-input max-suggestions="5" label="Remote URL example with wait time set to 1s" remote-url="{{fakeApiCall}}/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" remote-url-searching="{{isSearching}}" remote-url-wait-ms="1000" placeholder="Enter anything that will be passed in as a url parameter">
     </paper-typeahead-input>
     </paper-material>
 
     <paper-material class="demo"  elevation="1">
     <paper-material class="demo"  elevation="1">
-    <code>&lt;paper-typeahead-input local-candidates="{{<span>states</span>}}" prefetch-url="http://localhost:9004/components/paper-typeahead-input/countries.json" max-suggestions="5" label="Mix of localCandidates, prefetchUrl and remoteUrl" remote-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" placeholder="Search for US states "&gt;
+    <code>&lt;paper-typeahead-input local-candidates="{{<span>states</span>}}" prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/countries.json" max-suggestions="5" label="Mix of localCandidates, prefetchUrl and remoteUrl" remote-url="{{fakeApiCall}}/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" placeholder="Search for US states "&gt;
     &lt;/paper-typeahead-input&gt;
     </code>
     </paper-material>
-     <paper-typeahead-input local-candidates="{{states}}" prefetch-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/countries.json" max-suggestions="5" label="Mix of localCandidates, prefetchUrl and remoteUrl" remote-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" placeholder="Search for US states ">
+     <paper-typeahead-input local-candidates="{{states}}" prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/countries.json" max-suggestions="5" label="Mix of localCandidates, prefetchUrl and remoteUrl" remote-url="{{fakeApiCall}}/components/paper-typeahead-input/fakeRemote.json?q=%QUERY" placeholder="Search for US states ">
     </paper-typeahead-input>
     </paper-material>
 
 
     <paper-material class="demo"  elevation="1">
     <paper-material class="demo"  elevation="1">
-    <code>&lt;paper-typeahead-input prefetch-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/statesInObjects.json" max-suggestions="5" label="States in JSON object"  display-prop="name" searchable-props="{{searchable}}" is-candidates-json="true"  placeholder="Search for US states by state name or state nickname"&gt;
+    <code>&lt;paper-typeahead-input prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/statesInObjects.json" max-suggestions="5" label="States in JSON object"  display-prop="name" searchable-props="{{searchable}}" is-candidates-json="true"  placeholder="Search for US states by state name or state nickname"&gt;
     &lt;/paper-typeahead-input&gt;
     </code>
     </paper-material>
-     <paper-typeahead-input prefetch-url="http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/statesInObjects.json" max-suggestions="5" label="States in JSON object" display-prop="name" searchable-props="{{searchable}}" is-candidates-json="true" placeholder="Search for US states by state name or state nickname">
+     <paper-typeahead-input prefetch-url="{{fakeApiCall}}/components/paper-typeahead-input/statesInObjects.json" max-suggestions="5" label="States in JSON object" display-prop="name" searchable-props="{{searchable}}" is-candidates-json="true" placeholder="Search for US states by state name or state nickname">
     </paper-typeahead-input>
     </paper-material>
 
@@ -110,6 +130,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         app.test1 = true;
         app.searchable = ["name","nickname"];
         app.isSearching = false;
+        app.fakeApiCall = document.location.hostname === "localhost" ? "http://localhost:"+document.location.port : "http://cheonhyangzhang.github.io/paper-typeahead-input";
         app.states = [
            "Alabama",
            "Alaska",
@@ -172,7 +193,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
            "Wyoming"
           ]
       });
-
+      app.handlePrefetch = function(event, detail) {
+        console.log("handlePrefetch called with data " + JSON.stringify(detail));
+      };
+      app.handleRemote = function(event, detail) {
+        console.log("handleRemote called with data " + JSON.stringify(detail));
+      };
+      app.parseKeywords = function(response) {
+        return response.keywords;
+      };
 
     </script>
     </template>
